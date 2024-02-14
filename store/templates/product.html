@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+        <br><br><br>
+        <div class="container">
+            <div class="row">
+                <center>
+                    <div class="col-lg-5 col-ld-5 col-sm-7 col-12">
+                        <div class="card mb-3">
+                          <div class="row g-0">
+                            <div class="col-md-4">
+                              <img src="media/{{ product.image.url }}" class="img-fluid rounded-start" alt="...">
+                            </div>
+                            <div class="col-md-8">
+                              <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text">{{ product.description }}</p>
+                                <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                                  <br>
+                                  {% if product.in_sale %}
+                                    <span class="text-muted text-decoration-line-through">{{ product.price }} 💲</span><br>
+                                    {{ product.sale_price }} 💲
+                                    {% else %}
+                                    {{ product.price }} 💲
+                                    {% endif %}
+                                  <br><br>
+                                  <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home page</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </center>
+            </div>
+        </div>
+        <br><br>
+
+{% endblock %}
