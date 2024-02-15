@@ -89,5 +89,3 @@ def category_summary(request):
     return render(request, 'category_summary.html', {'categories': categories})
 
 
-
-
