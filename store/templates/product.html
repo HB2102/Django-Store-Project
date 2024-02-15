@@ -5,7 +5,7 @@
         <div class="container">
             <div class="row">
                 <center>
-                    <div class="col-lg-5 col-ld-5 col-sm-7 col-12">
+                    <div class="col-lg-7 col-ld-7 col-sm-9 col-12">
                         <div class="card mb-3">
                           <div class="row g-0">
                             <div class="col-md-4">
@@ -23,6 +23,20 @@
                                     {% else %}
                                     {{ product.price }} 💲
                                     {% endif %}
+
+                                  <br><br>
+                                  <div class="row justify-content-center">
+                                      <div class="col-lg-5 col-ld-5 col-sm-5 col-12">Quantity:</div>
+                                      <div class="col-lg-7 col-ld-7 col-sm-7 col-12">
+                                            <select class="form-select" id="qty-cart">
+                                              <option value="1">1</option>
+                                              <option value="2">2</option>
+                                              <option value="3">3</option>
+                                              <option value="4">4</option>
+                                              <option value="5">5</option>
+                                            </select>
+                                      </div>
+                                  </div>
                                   <br><br>
                                   <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home page</a>
                                   <button type="button" value="{{ product.id }}" class="btn btn-primary" id="add-cart">Add To Cart</button>
