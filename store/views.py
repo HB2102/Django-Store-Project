@@ -84,3 +84,10 @@ def category(request, cat):
         return redirect('home')
 
 
+def category_summary(request):
+    categories = Category.objects.all()
+    return render(request, 'category_summary.html', {'categories': categories})
+
+
+
+

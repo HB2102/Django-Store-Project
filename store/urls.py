@@ -12,6 +12,7 @@ urlpatterns = [
     path('register/', views.register_user, name='register'),
     path('product/<int:pk>', views.product, name='product'),
     path('category/<str:cat>', views.category, name='category'),
+    path('category_summary/', views.category_summary, name='category_summary'),
 ]
 
 # if settings.DEBUG:
