@@ -69,6 +69,7 @@ class Cart():
         quantities = self.cart
 
         total = 0
+        #
 
         for key, value in quantities.items():
             key = int(key)
