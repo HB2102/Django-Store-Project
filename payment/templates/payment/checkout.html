@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+        <!-- Header-->
+        <header class="bg-dark py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Chekout</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">Review your order</p>
+                </div>
+            </div>
+        </header>
+        <br><br>
+        <div class="container">
+            <div class="container">
+            <div class="row">
+                <center>
+                    <div class="col-lg-5 col-ld-5 col-sm-7 col-12">
+                        <div class="card">
+                          <div class="card-header">
+                            Order Summary
+                          </div>
+                          <div class="card-body" align="left">
+                              {% for product in cart_products %}
+                              {{ product.name }} :
+                              {% if product.in_sale %}
+                                    <span class="text-muted text-decoration-line-through">{{ product.price }} 💲</span><br>
+                                    {{ product.sale_price }} 💲
+                                    {% else %}
+                                    {{ product.price }} 💲
+                              {% endif %}
+
+                              <br>
+                              <small>
+                              Quantity:
+                              {% for key, value in quantities.items %}
+                                              {% if key == product.id|slugify %}
+                                                {{ value }}
+                                              {% endif %}
+                              {% endfor %}
+                              </small>
+                              <br><br>
+
+
+                              {% endfor %}
+
+                              <strong>Total: {{ total }} 💲</strong><br><br>
+
+                              <a href="{% url 'cart_summary' %}" class="btn btn-sm btn-outline-warning">
+                                  Update Items
+                              </a>
+                          </div>
+                        </div>
+                        <br><br>
+                        <div class="card">
+                          <div class="card-header">
+                            Shipping Info
+                          </div>
+                          <div class="card-body">
+                              {{ shipping_form.as_p }}
+                          </div>
+                        </div><br>
+                        <a href="#" class="btn btn-primary">Continue to billing</a>
+                    </div>
+                </center>
+            </div>
+        </div>
+            <br><br><br><br><br><br>
+
+        </div>
+        <br><br><br>
+
+
+{% endblock %}
+
+

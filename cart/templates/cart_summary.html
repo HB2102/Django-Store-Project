@@ -68,7 +68,11 @@
             </div>
             {% endfor %}
 
-            <h3>Total: {{ total }}💲</h3>
+            <div align="right">
+                <h3>Total: {{ total }}💲</h3>
+                <a href="{% url 'checkout' %}" class="btn btn-success">Checkout</a>
+            </div>
+
 
             {% else %}
             <center>
