@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from cart.cart import Cart
 from payment.forms import ShippingForm
 from payment.models import ShippingAddress
+from django.contrib import messages
+from .forms import PaymentForm, ShippingForm
 
 
 def payment_success(request):
@@ -26,6 +28,30 @@ def checkout(request):
                       {'cart_products': cart_products, 'quantities': quantities, 'total': total, 'shipping_form': shipping_form})
 
 
+def billing_info(request):
+    if request.POST:
+        cart = Cart(request)
+        cart_products = cart.get_products
+        quantities = cart.get_quantities
+        total = cart.cart_total
+        billing_form = PaymentForm()
 
+        if request.user.is_authenticated:
+
+            return render(request, 'payment/billing_info.html',
+                          {'cart_products': cart_products, 'quantities': quantities, 'total': total,
+                           'shipping_info': request.POST, 'billing_form': billing_form})
+
+        else:
+            return render(request, 'payment/billing_info.html',
+                          {'cart_products': cart_products, 'quantities': quantities, 'total': total,
+                           'shipping_info': request.POST, 'billing_form': billing_form})
+
+
+
+
+    else:
+        messages.error(request, 'Access Denied')
+        return redirect('home')
 
 
