@@ -5,8 +5,8 @@
         <header class="bg-dark py-5">
             <div class="container px-4 px-lg-5 my-5">
                 <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">Billing Info</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">Entr your payment information...</p>
+                    <h1 class="display-4 fw-bolder">Process Order</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">just for now</p>
                 </div>
             </div>
         </header>
@@ -82,17 +82,12 @@
                               <form method="POST" action="{% url 'process_order' %}">
                                   {% csrf_token %}
                                   {{ billing_form.as_p }}
-
-                                  <br>
-                                  <div align="center">
-                                      <button type="submit" class="btn btn-primary">Pay Now</button>
-                                  </div>
-
                               </form>
 
                           </div>
                         </div>
                         <br>
+                        <button type="submit" href="#" class="btn btn-primary">Pay Now</button>
                     </div>
                 </center>
             </div>

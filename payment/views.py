@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from cart.cart import Cart
 from payment.forms import ShippingForm
-from payment.models import ShippingAddress
+from .models import ShippingAddress, Order, OrderItem
+from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import PaymentForm, ShippingForm
 
@@ -36,6 +37,10 @@ def billing_info(request):
         total = cart.cart_total
         billing_form = PaymentForm()
 
+
+        my_shipping = request.POST
+        request.session['my_shipping'] = my_shipping
+
         if request.user.is_authenticated:
 
             return render(request, 'payment/billing_info.html',
@@ -55,3 +60,46 @@ def billing_info(request):
         return redirect('home')
 
 
+def process_order(request):
+    if request.POST:
+        cart = Cart(request)
+
+        total = cart.cart_total()
+
+        my_shipping = request.session.get('my_shipping')
+
+        full_name = my_shipping['shipping_full_name']
+        email = my_shipping['shipping_email']
+        amount_paid = total
+        shipping_address = (f'{my_shipping["shipping_full_name"]}\n'
+                            f'{my_shipping["shipping_address1"]}\n'
+                            f'{my_shipping["shipping_address2"]}\n'
+                            f'{my_shipping["shipping_country"]}\n'
+                            f'{my_shipping["shipping_city"]}\n'
+                            f'{my_shipping["shipping_postal_code"]}\n')
+
+
+
+
+        if request.user.is_authenticated:
+            user = request.user
+
+            create_order = Order(user=user, full_name=full_name, email=email, shipping_address=shipping_address, amount_paid=amount_paid)
+            create_order.save()
+
+            messages.success(request, 'Order Places')
+            return redirect('home')
+
+        else:
+            create_order = Order(full_name=full_name, email=email, shipping_address=shipping_address,
+                                 amount_paid=amount_paid)
+            create_order.save()
+
+            messages.success(request, 'Order Places')
+            return redirect('home')
+
+
+
+    else:
+        messages.error(request, 'Access Denied')
+        return redirect('home')
