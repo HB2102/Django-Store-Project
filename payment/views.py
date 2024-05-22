@@ -163,6 +163,19 @@ def shipped_dash(request):
         orders = Order.objects.filter(is_shipped=True)
         return render(request, 'payment/shipped_dash.html', {'orders': orders})
 
+
+    else:
+        messages.error(request, 'Access Denied')
+        return redirect('home')
+
+
+def orders(request, pk):
+    if request.user.is_authenticated and request.user.is_superuser:
+        order = Order.objects.get(id=pk)
+
+        items = OrderItem.objects.filter(order=pk)
+
+        return render(request, 'payment/orders.html', {'order': order, 'items': items})
     else:
         messages.error(request, 'Access Denied')
         return redirect('home')
