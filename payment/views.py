@@ -1,3 +1,4 @@
+import datetime
 from django.shortcuts import render, redirect
 from cart.cart import Cart
 from payment.forms import ShippingForm
@@ -151,6 +152,14 @@ def process_order(request):
 def not_shipped_dash(request):
     if request.user.is_authenticated and request.user.is_superuser:
         orders = Order.objects.filter(is_shipped=False)
+        if request.POST:
+            num = request.POST['num']
+            order = Order.objects.filter(id=num)
+            now = datetime.datetime.now()
+            order.update(is_shipped=True, date_shipped=now)
+            messages.success(request, 'Shipping Status Changed To "Shipped"')
+            return redirect('not_shipped_dash')
+
         return render(request, 'payment/not_shipped_dash.html', {'orders': orders})
 
     else:
@@ -161,6 +170,13 @@ def not_shipped_dash(request):
 def shipped_dash(request):
     if request.user.is_authenticated and request.user.is_superuser:
         orders = Order.objects.filter(is_shipped=True)
+        if request.POST:
+            num = request.POST['num']
+            order = Order.objects.filter(id=num)
+            order.update(is_shipped=False, date_shipped=None)
+            messages.success(request, 'Shipping Status Changed To "Not Shipped"')
+            return redirect('shipped_dash')
+
         return render(request, 'payment/shipped_dash.html', {'orders': orders})
 
 
@@ -174,6 +190,22 @@ def orders(request, pk):
         order = Order.objects.get(id=pk)
 
         items = OrderItem.objects.filter(order=pk)
+
+        if request.POST:
+            status = request.POST['shipping_status']
+            order = Order.objects.filter(id=pk)
+            if status == 'true':
+                now = datetime.datetime.now()
+                order.update(is_shipped=True, date_shipped=now)
+                messages.success(request, 'Shipping Status Changed To "Shipped"')
+                return redirect('not_shipped_dash')
+            else:
+                order.update(is_shipped=False)
+                messages.success(request, 'Shipping Status Changed Back To "Not Shipped"')
+                return redirect('shipped_dash')
+
+
+
 
         return render(request, 'payment/orders.html', {'order': order, 'items': items})
     else:
