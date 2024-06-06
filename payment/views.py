@@ -6,7 +6,7 @@ from .models import ShippingAddress, Order, OrderItem
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import PaymentForm, ShippingForm
-from store.models import Product
+from store.models import Product, Profile
 
 
 def payment_success(request):
@@ -23,12 +23,14 @@ def checkout(request):
         shipping_user = ShippingAddress.objects.get(user__id=request.user.id)
         shipping_form = ShippingForm(request.POST or None, instance=shipping_user)
         return render(request, 'payment/checkout.html',
-                      {'cart_products': cart_products, 'quantities': quantities, 'total': total, 'shipping_form': shipping_form})
+                      {'cart_products': cart_products, 'quantities': quantities, 'total': total,
+                       'shipping_form': shipping_form})
 
     else:
         shipping_form = ShippingForm(request.POST or None)
         return render(request, 'payment/checkout.html',
-                      {'cart_products': cart_products, 'quantities': quantities, 'total': total, 'shipping_form': shipping_form})
+                      {'cart_products': cart_products, 'quantities': quantities, 'total': total,
+                       'shipping_form': shipping_form})
 
 
 def billing_info(request):
@@ -38,7 +40,6 @@ def billing_info(request):
         quantities = cart.get_quantities
         total = cart.cart_total
         billing_form = PaymentForm()
-
 
         my_shipping = request.POST
         request.session['my_shipping'] = my_shipping
@@ -81,13 +82,11 @@ def process_order(request):
                             f'{my_shipping["shipping_city"]}\n'
                             f'{my_shipping["shipping_postal_code"]}\n')
 
-
-
-
         if request.user.is_authenticated:
             user = request.user
 
-            create_order = Order(user=user, full_name=full_name, email=email, shipping_address=shipping_address, amount_paid=amount_paid)
+            create_order = Order(user=user, full_name=full_name, email=email, shipping_address=shipping_address,
+                                 amount_paid=amount_paid)
             create_order.save()
             order_id = create_order.pk
 
@@ -100,15 +99,17 @@ def process_order(request):
 
                 for key, value in quantities.items():
                     if int(key) == product_id:
-                        create_order_item = OrderItem(order_id=order_id, product_id=product_id, user=user, quantity=value, price=price)
+                        create_order_item = OrderItem(order_id=order_id, product_id=product_id, user=user,
+                                                      quantity=value, price=price)
                         create_order_item.save()
-
 
             #delete cart
             for key in list(request.session.keys()):
                 if key == "session_key":
                     del request.session[key]
 
+            current_user = Profile.objects.filter(user_id=request.user.id)
+            current_user.update(old_cart='')
 
             messages.success(request, 'Order Places')
             return redirect('home')
@@ -203,9 +204,6 @@ def orders(request, pk):
                 order.update(is_shipped=False)
                 messages.success(request, 'Shipping Status Changed Back To "Not Shipped"')
                 return redirect('shipped_dash')
-
-
-
 
         return render(request, 'payment/orders.html', {'order': order, 'items': items})
     else:
