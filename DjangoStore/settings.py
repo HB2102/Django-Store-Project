@@ -72,14 +72,14 @@ WSGI_APPLICATION = 'DjangoStore.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': 'roundhouse.proxy.rlwy.net',
-        'PORT': '25861',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'railway',
+        # 'USER': 'postgres',
+        # 'PASSWORD': os.environ.get('DB_PASSWORD'),
+        # 'HOST': 'roundhouse.proxy.rlwy.net',
+        # 'PORT': '25861',
     }
 }
 
